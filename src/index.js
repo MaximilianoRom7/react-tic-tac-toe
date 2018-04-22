@@ -53,9 +53,11 @@ class Square extends React.Component {
 class Board extends React.Component {
     constructor(props) {
         super(props);
+        this.side = 4;
+        this.size = this.side * this.side;
         /* Board saves the state of each Square */
         this.state = {
-            squares: Array(9).fill(null),
+            squares: Array(this.size).fill(null),
         };
     }
 
@@ -75,27 +77,34 @@ class Board extends React.Component {
         );
     }
 
+    boardRow(rowNumber) {
+        var row = [];
+        var move = rowNumber * this.side
+        for(var i = 0; i < this.side; i++) {
+            row.push(this.renderSquare(i + move));
+        }
+        return row;
+    }
+
+    boardDraw() {
+        var board = [];
+        for(var i = 0; i < this.side; i++) {
+            board.push((
+                <div className="board-row">
+                  {this.boardRow(i)}
+                </div>
+            ));
+        }
+        return board;
+    }
+
     render() {
         const status = 'Next player: X';
 
         return (
             <div>
               <div className="status">{status}</div>
-              <div className="board-row">
-                {this.renderSquare(0)}
-                {this.renderSquare(1)}
-                {this.renderSquare(2)}
-              </div>
-              <div className="board-row">
-                {this.renderSquare(3)}
-                {this.renderSquare(4)}
-                {this.renderSquare(5)}
-              </div>
-              <div className="board-row">
-                {this.renderSquare(6)}
-                {this.renderSquare(7)}
-                {this.renderSquare(8)}
-              </div>
+              {this.boardDraw()}
             </div>
         );
     }

@@ -6,16 +6,19 @@ import './index.css';
 class Square extends React.Component {
     render() {
         return (
-            <button className="square">
-              {/* TODO */}
+            <button className="square" onClick={this.onClick.bind(this)}>
+              {this.props.value}
             </button>
         );
+    }
+    onClick(event) {
+        console.log('Square Clicked: ' + this.props.value);
     }
 }
 
 class Board extends React.Component {
     renderSquare(i) {
-        return <Square />;
+        return <Square value={i}/>;
     }
 
     render() {

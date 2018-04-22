@@ -6,8 +6,8 @@ import './index.css';
 class Square extends React.Component {
     constructor(props) {
         /*
-         this is constructor is called once even
-         when the prop value changes
+          this is constructor is called once even
+          when the prop value changes
         */
         super(props);
         this.state = {
@@ -31,7 +31,9 @@ class Square extends React.Component {
             value = this.state.value;
         this.value = value;
         return (
-            <button className="square" onClick={this.onClick.bind(this)}>
+            <button className="square"
+                    onClick={this.onClick.bind(this)}
+                    style={{backgroundColor: this.props.color}}>
               {value}
             </button>
         );
@@ -62,7 +64,6 @@ class Board extends React.Component {
         super(props);
         this.side = props.size || 6;
         this.size = this.side * this.side;
-        this.players = ["X", "Y", "Z"];
         /* Board saves the state of each Square */
         this.state = {
             squares: Array(this.size).fill(null),
@@ -72,19 +73,19 @@ class Board extends React.Component {
     onSquareClick(squareID) {
         /* copy array to prevent mutability */
         const squares = this.state.squares.slice();
-        var player = this.props.player;
-        squares[squareID] = this.players[player];
+        squares[squareID] = this.props.tocken;
         this.setState({
             squares: squares,
-            player: player,
         });
     }
 
     renderSquare(i) {
+        const square = this.state.squares[i];
         return (
             <Square
               ID={i}
-              value={this.state.squares[i]}
+              value={square && square.value}
+              color={square && square.color}
               onClick={(event) => this.onSquareClick(i)}/>
         );
     }
@@ -144,7 +145,7 @@ class Game extends React.Component {
             this.props.players || this.tockens.length);
         this.state = {
             player: 0,
-            tocken: this.tockens[9],
+            tocken: this.tockens[0],
         };
     }
 
@@ -168,7 +169,10 @@ class Game extends React.Component {
     nextMove() {
         const player = this.nextPlayer();
         console.log("Next Player: " + (player + 1));
-        this.setState({player: player});
+        this.setState({
+            player: player,
+            tocken: this.tockens[player],
+        });
     }
 
     render() {
@@ -176,8 +180,7 @@ class Game extends React.Component {
         return (
             <div className="game" onClick={this.nextMove.bind(this)}>
               <Board
-                player={this.state.player}
-                token={this.state.tocken}
+                tocken={this.state.tocken}
                 />
               <div className="status">{status}</div>
               <GameInfo />

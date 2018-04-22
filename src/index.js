@@ -73,7 +73,7 @@ class Board extends React.Component {
     onSquareClick(squareID) {
         /* copy array to prevent mutability */
         const squares = this.state.squares.slice();
-        squares[squareID] = this.props.tocken;
+        squares[squareID] = this.props.token;
         this.setState({
             squares: squares,
         });
@@ -136,24 +136,24 @@ class GameInfo extends React.Component {
 class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.tockens = [
+        this.tokens = [
             { value: "X", color: 'red' },
             { value: "Y", color: 'green' },
             { value: "Z", color: 'blue' }
         ];
         this.players = this.checkMaxPlayers(
-            this.props.players || this.tockens.length);
+            this.props.players || this.tokens.length);
         this.state = {
             player: 0,
-            tocken: this.tockens[0],
+            token: this.tokens[0],
         };
     }
 
     checkMaxPlayers(players) {
-        if(players > this.tockens.length)
+        if(players > this.tokens.length)
             throw new Error(
                 "the maximum amount of " +
-                    "players is the amount of tockens"
+                    "players is the amount of tokens"
             );
         return players;
     }
@@ -161,9 +161,9 @@ class Game extends React.Component {
     nextPlayer() {
         /*
           The maximum amount of players is limited
-          by the amount of tockens
+          by the amount of tokens
         */
-        return (this.state.player + 1) % this.tockens.length;
+        return (this.state.player + 1) % this.tokens.length;
     }
 
     nextMove() {
@@ -171,7 +171,7 @@ class Game extends React.Component {
         console.log("Next Player: " + (player + 1));
         this.setState({
             player: player,
-            tocken: this.tockens[player],
+            token: this.tokens[player],
         });
     }
 
@@ -180,7 +180,7 @@ class Game extends React.Component {
         return (
             <div className="game" onClick={this.nextMove.bind(this)}>
               <Board
-                tocken={this.state.tocken}
+                token={this.state.token}
                 />
               <div className="status">{status}</div>
               <GameInfo />

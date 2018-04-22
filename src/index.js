@@ -13,6 +13,7 @@ class Square extends React.Component {
         this.state = {
             value: null,
         };
+        this.value = null;
     }
 
     render() {
@@ -28,6 +29,7 @@ class Square extends React.Component {
             value = this.props.value;
         else
             value = this.state.value;
+        this.value = value;
         return (
             <button className="square" onClick={this.onClick.bind(this)}>
               {value}
@@ -37,6 +39,11 @@ class Square extends React.Component {
 
     /* set the square state on the click event */
     onClick(event) {
+        /* do not change value */
+        if(this.value !== null) {
+            alert("Cannot change Square value");
+            return;
+        }
         if(this.props.onClick) {
             /* delegate state change to the upper component in this case Board */
             this.props.onClick(event);

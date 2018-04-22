@@ -112,28 +112,39 @@ class Board extends React.Component {
     }
 
     render() {
-        const status = 'Next player: X';
 
         return (
             <div>
-              <div className="status">{status}</div>
-              {this.boardDraw()}
+              <div className="game-board">
+                {this.boardDraw()}
+              </div>
+            </div>
+        );
+    }
+}
+
+class GameInfo extends React.Component {
+    render() {
+        return (
+            <div className="game-info">
+              <div>{/* status */}</div>
+              <ol>{/* TODO */}</ol>
             </div>
         );
     }
 }
 
 class Game extends React.Component {
+    nextMove() {
+        console.log("Next Move");
+    }
     render() {
+        const status = 'Next player: X';
         return (
-            <div className="game">
-              <div className="game-board">
-                <Board />
-              </div>
-              <div className="game-info">
-                <div>{/* status */}</div>
-                <ol>{/* TODO */}</ol>
-              </div>
+            <div className="game" onClick={this.nextMove.bind(this)}>
+              <Board />
+              <div className="status">{status}</div>
+              <GameInfo />
             </div>
         );
     }

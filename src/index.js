@@ -136,20 +136,12 @@ class Game extends React.Component {
     constructor(props) {
         super(props);
         this.tockens = [
-            {
-                value: "X",
-                color: 'red',
-            },
-            {
-                value: "Y",
-                color: 'green',
-            },
-            {
-                value: "Z",
-                color: 'blue',
-            }
+            { value: "X", color: 'red' },
+            { value: "Y", color: 'green' },
+            { value: "Z", color: 'blue' }
         ];
-        this.players = this.checkMaxPlayers(this.props.players || this.tockens.length);
+        this.players = this.checkMaxPlayers(
+            this.props.players || this.tockens.length);
         this.state = {
             player: 0,
             tocken: this.tockens[9],
@@ -157,13 +149,11 @@ class Game extends React.Component {
     }
 
     checkMaxPlayers(players) {
-        if(players > this.tockens.length) {
-            console.log(
-                "Warning the maximum amount of" +
-                    "players is the same of tockens"
+        if(players > this.tockens.length)
+            throw new Error(
+                "the maximum amount of " +
+                    "players is the amount of tockens"
             );
-            return this.tockens.length;
-        }
         return players;
     }
 

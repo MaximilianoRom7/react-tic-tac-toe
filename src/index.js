@@ -6,8 +6,8 @@ import './index.css';
 class Square extends React.Component {
     constructor(props) {
         /*
-         * this is constructor is called once even
-         * when the prop value changes
+         this is constructor is called once even
+         when the prop value changes
         */
         super(props);
         this.state = {
@@ -60,20 +60,19 @@ class Square extends React.Component {
 class Board extends React.Component {
     constructor(props) {
         super(props);
-        this.side = props.size || 4;
+        this.side = props.size || 6;
         this.size = this.side * this.side;
         this.players = ["X", "Y", "Z"];
         /* Board saves the state of each Square */
         this.state = {
             squares: Array(this.size).fill(null),
-            player: -1,
         };
     }
 
     onSquareClick(squareID) {
         /* copy array to prevent mutability */
         const squares = this.state.squares.slice();
-        var player = (this.state.player + 1) % this.players.length;
+        var player = this.props.player;
         squares[squareID] = this.players[player];
         this.setState({
             squares: squares,
@@ -112,7 +111,6 @@ class Board extends React.Component {
     }
 
     render() {
-
         return (
             <div>
               <div className="game-board">
@@ -135,14 +133,62 @@ class GameInfo extends React.Component {
 }
 
 class Game extends React.Component {
-    nextMove() {
-        console.log("Next Move");
+    constructor(props) {
+        super(props);
+        this.tockens = [
+            {
+                value: "X",
+                color: 'red',
+            },
+            {
+                value: "Y",
+                color: 'green',
+            },
+            {
+                value: "Z",
+                color: 'blue',
+            }
+        ];
+        this.players = this.checkMaxPlayers(this.props.players || this.tockens.length);
+        this.state = {
+            player: 0,
+            tocken: this.tockens[9],
+        };
     }
+
+    checkMaxPlayers(players) {
+        if(players > this.tockens.length) {
+            console.log(
+                "Warning the maximum amount of" +
+                    "players is the same of tockens"
+            );
+            return this.tockens.length;
+        }
+        return players;
+    }
+
+    nextPlayer() {
+        /*
+          The maximum amount of players is limited
+          by the amount of tockens
+        */
+        return (this.state.player + 1) % this.tockens.length;
+    }
+
+    nextMove() {
+        const player = this.nextPlayer();
+        console.log("Next Player: " + (player + 1));
+        this.setState({player: player});
+    }
+
     render() {
         const status = 'Next player: X';
         return (
             <div className="game" onClick={this.nextMove.bind(this)}>
-              <Board />
+              <Board
+                player={this.state.player}
+                token={this.state.tocken}
+                />
               <div className="status">{status}</div>
               <GameInfo />
             </div>

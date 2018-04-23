@@ -41,11 +41,6 @@ class Square extends React.Component {
 
     /* set the square state on the click event */
     onClick(event) {
-        /* do not change value */
-        if(this.value !== null) {
-            alert("Cannot change Square value");
-            return;
-        }
         if(this.props.onClick) {
             /* delegate state change to the upper component in this case Board */
             this.props.onClick(event);
@@ -70,13 +65,28 @@ class Board extends React.Component {
         };
     }
 
-    onSquareClick(squareID) {
+    checkSquareOverride(squareID) {
+        /* do not change value */
+        if(this.state.squares[squareID] && this.state.squares[squareID].value !== null) {
+            alert("Cannot change Square value");
+            return false;
+        }
+        return true;
+    }
+
+    setSquareToken(squareID) {
         /* copy array to prevent mutability */
         const squares = this.state.squares.slice();
         squares[squareID] = this.props.token;
         this.setState({
             squares: squares,
         });
+    }
+
+    onSquareClick(squareID) {
+        if(!this.checkSquareOverride(squareID))
+            return
+        this.setSquareToken(squareID);
     }
 
     renderSquare(i) {
@@ -158,25 +168,42 @@ class Game extends React.Component {
         return players;
     }
 
-    nextPlayer() {
+    nextPlayer(next) {
         /*
+          if next > -1 the next player is return else the previous
           The maximum amount of players is limited
           by the amount of tokens
         */
-        return (this.state.player + 1) % this.tokens.length;
+        var move;
+        if(typeof next == 'undefined' || next > -1)
+            move = 1
+        else
+            move = -1
+        return (this.state.player + move) % this.tokens.length;
     }
 
     nextMove() {
         const player = this.nextPlayer();
-        console.log("Next Player: " + (player + 1));
         this.setState({
             player: player,
             token: this.tokens[player],
         });
     }
 
+    prevMove() {
+        const player = this.nextPlayer(-1);
+        this.setState({
+            player: player,
+            token: this.tokens[player],
+        });
+    }
+
+    getStatus() {
+        return 'Player ' + (this.state.player + 1) + "# Turn";
+    }
+
     render() {
-        const status = 'Next player: X';
+        const status = this.getStatus();
         return (
             <div className="game" onClick={this.nextMove.bind(this)}>
               <Board

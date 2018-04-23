@@ -197,7 +197,7 @@ class Game extends React.Component {
     render() {
         const status = this.getStatus();
         return (
-            <div className="game" onClick={this.nextMove.bind(this)}>
+            <div className="game" onClick={(event) => this.nextMove()}>
               <Board
                 token={this.state.token}
                 />

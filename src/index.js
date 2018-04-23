@@ -182,16 +182,8 @@ class Game extends React.Component {
         return (this.state.player + move) % this.tokens.length;
     }
 
-    nextMove() {
-        const player = this.nextPlayer();
-        this.setState({
-            player: player,
-            token: this.tokens[player],
-        });
-    }
-
-    prevMove() {
-        const player = this.nextPlayer(-1);
+    nextMove(move) {
+        const player = this.nextPlayer(move);
         this.setState({
             player: player,
             token: this.tokens[player],

@@ -57,7 +57,7 @@ class Square extends React.Component {
 class Board extends React.Component {
     constructor(props) {
         super(props);
-        this.side = props.size || 6;
+        this.side = props.size || 10;
         this.size = this.side * this.side;
         /* Board saves the state of each Square */
         this.state = {
@@ -85,8 +85,10 @@ class Board extends React.Component {
 
     onSquareClick(squareID) {
         if(!this.checkSquareOverride(squareID))
-            return
+            return;
         this.setSquareToken(squareID);
+        if(this.props.nextMove)
+            this.props.nextMove();
     }
 
     renderSquare(i) {
@@ -176,9 +178,9 @@ class Game extends React.Component {
         */
         var move;
         if(typeof next == 'undefined' || next > -1)
-            move = 1
+            move = 1;
         else
-            move = -1
+            move = -1;
         return (this.state.player + move) % this.tokens.length;
     }
 
@@ -197,9 +199,10 @@ class Game extends React.Component {
     render() {
         const status = this.getStatus();
         return (
-            <div className="game" onClick={(event) => this.nextMove()}>
+            <div className="game">
               <Board
                 token={this.state.token}
+                nextMove={(event) => this.nextMove()}
                 />
               <div className="status">{status}</div>
               <GameInfo />
